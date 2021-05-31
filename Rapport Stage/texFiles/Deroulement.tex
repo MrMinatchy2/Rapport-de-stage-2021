@@ -4,11 +4,33 @@
 Ce chapitre, le plus volumineux du rapport, décrira l'ensemble des tâches que j'ai eu à effectuer au cours de ces deux mois.
 
 
-\section{État des lieux}
-Citation:
-\cite{Lympero}
+\section{Présentation des stratégies de résolution}
+\subsection{Présentation de la résolution avec Cplex}
+\subsubsection{Qu'est-ce qu'un problème d'optimisation linéaire}
+Nous allons dans cette première partie parler de la résolution de sudoku comme étant un problème d'optimisation linéaire. Mais tout d'abord nous devons définir ce qu'est un problème d'optimisation linéaire.\newline\newline
+Par définition un problème d'optimisation linéaire est un problème dont la valeur à obtimiser ainsi que les contraintes qui y seront appliquer peuvent-êtres modélisées sous la forme d'une fonction linéaire cette description n'est pas des plus précises que l'on puisse c'est pour cela que nous allons l'étoffer par un problème connu.\newline\newline
+Le problème du brasseur de bière peut être énoncer comme suit:\newline\newline
+Un brasseur fabrique 2 types de bières : blonde et brune.\newline
+3 ingrédients : maïs , houblon , malt.\newline
+Quantités requises par unité de volume:\newline
+Bière blonde: 2,5 kg de maïs, 125 g de houblon, 17,5 kg de malt\newline
+Bière brune : 7,5 kg de maïs, 125 g de houblon, 10 kg de malt\newline
+Le brasseur dispose de 240 kg maïs, 5 kg houblon , 595 kg malt\newline
+Prix vente par u.v. : blonde 15 euros , brune 20 euros
+Le brasseur veut maximiser son revenu .\newline
+Quelle quantité de bières blondes et/ou brunes doit-il produire pour cela ?\newline
+\newline
+Nous pouvons modéliser le revenu du brasseur comme étant une fonction linéaire tel que:\newline
+Soit $x^{1}$ le nombre de volumes d'unité de bière blonde et $x^{2}$ le nombre d'unité de volume de bière brune\newline
+Nous avons:\newline\newline
+Le revenu que nous de vons maximiser: $R = x^{1}*15 + x^{2}*12$\newline\newline
+Les contraintes peuvent êtres représentées comme suit:\newline\newline
+La quantité maximale de maïs: $M \geq x^{1}*2,5+x^{2}*7,5$\newline
+La quantité maximale de houblon: $H \geq x^{1}*0,125+x^{2}*0,125$\newline
+La quantité maximale de malt: $Ma \geq x^{1}*17,5+x^{2}*10$\newline\newline
 
-\section{Solutions envisagées}
-\subsection{Modélisation de sudoku en Python}
+\subsubsection{Comment résoudre un problème d'optimisation linéaire}
+
+ Maintenant que nous avons vu ce qu'est un problème d'optimisation linéaire et illustré ceci par un exemple nous allons voir comment peut-on le résoudre,plus particulièrement comment avec l'algorithme du simplex en théorie puis avec Cplex.
 \subsection{Stratégie de résolution}
 \subsection{Implémentation}
