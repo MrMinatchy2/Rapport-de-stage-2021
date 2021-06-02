@@ -31,7 +31,7 @@ La quantité maximale de malt: $Ma \geq x^{1}*17,5+x^{2}*10$\newline\newline
 
 \subsubsection{Comment résoudre un problème d'optimisation linéaire}
 
- Maintenant que nous avons vu ce qu'est un problème d'optimisation linéaire et illustré ceci par un exemple nous allons voir comment peut-on le résoudre,plus particulièrement comment avec l'algorithme du simplex en théorie puis avec Cplex.
+ Maintenant que nous avons vu ce qu'est un problème d'optimisation linéaire et illustré ceci par un exemple nous allons voir comment peut-on le résoudre plus particulièrement comment avec l'algorithme du simplex en théorie puis avec Cplex.
 
  La résolution avec cplex est des plus simples il suffit de mettre en place nos contraintes et notre fonction à maximiser le code sera donner et expliciter en annexe:
 
@@ -55,7 +55,7 @@ Le backtracking est la solution la plus simple à comprendre il s'agit tout simp
 \end{center}
 \end{figure}
 
-Comme l'illustre cette image nous essayons toutes les possibilitées et retournons en arrière si nous tombons dans une impasse dans nous passons de case vide\footnote{\label{vide}Une case vide est comme dit plus haut une case contenant la valeur 0} en case vide\footref{vide} en revenant en arrière si peu importe la le chiffre essayer dans cette case allant de 1 à 9, nous donne un sudoku invalide. Le problèlme de cette algorithme qui reviens le plus souvent est dù au fait que nous essayons toutes les valeurs possible ce qui nous donne une très grande quantité d'action et donc ce qui augmente considérablement notre temps de calcul nous pouvons toutefois régler ce problème en évitant de tester les possibiliter qui nous amène de façon logique à une impasse ou éviter de tester des possibilité d'une case si il est possible de déduire sa valeur de façonj logique.
+Comme l'illustre cette image nous essayons toutes les possibilitées et retournons en arrière si nous tombons dans une impasse dans nous passons de case vide\footnote{\label{vide}Une case vide est comme dit plus haut une case contenant la valeur 0} en case vide\footref{vide} en revenant en arrière si peu importe la le chiffre essayer dans cette case allant de 1 à 9, nous donne un sudoku invalide. Le problèlme de cette algorithme qui reviens le plus souvent est dù au fait que nous essayons toutes les valeurs possible ce qui nous donne une très grande quantité d'action et donc ce qui augmente considérablement notre temps de calcul nous pouvons toutefois régler ce problème en évitant de tester les possibiliter qui nous amène de façon logique à une impasse ou éviter de tester des possibilité d'une case si il est possible de déduire sa valeur de façon logique.
 \subsection{Pourquoi utiliser ces deux algorithme}
 
 \subsubsection{Pourquoi utiliser l'algorithme du simplex}
@@ -64,6 +64,17 @@ La résolution avec l'algorithme du simplex permet une implementation intuitive 
 
 \subsubsection{Pourquoi utiliser l'algorithme utilisant le backtracking}
 
-La résolution avec avec backtracking est l'algorithme le plus naturel qui viennent à l'esprit dans la résolution de problème avec contrainte ce qui permet une facile implémentation de la gestion des contraintes malgré leur nombre.C'est un algorithme facilement améliorable car le but tout au long de son implémentation sera de tester le moins de valeur menant à une impasse possible. Cette algorithme a aussi pour avantage de n'avoir besoin daucune librairie extérieur ce qui permet une liberté totale au niveau du code et donne lieu à une certaine transparence quand à son fonctionnement contrairement aux fonctions que nous utilisons via cplex qui peuvent différé légèrement de leurs fonctionnements théoriques cités plus haut.
+La résolution avec avec backtracking est l'algorithme le plus naturel qui viennent à l'esprit dans la résolution de problème avec contrainte ce qui permet une facile implémentation de la gestion des contraintes malgré leur nombre.C'est un algorithme facilement améliorable car le but tout au long de son implémentation sera de tester le moins de valeur menant à une impasse possible. Cette algorithme a aussi pour avantage de n'avoir besoin daucune librairie extérieur ce qui permet une liberté totale au niveau du code et donne lieu à une certaine transparence quand à son fonctionnement contrairement aux au code que nous utilisons via cplex qui peuvent différé légèrement de leurs fonctionnements théoriques cités plus haut.
 
-\subsection{Implémentation}
+\subsection{Implémentation des Stratégies de résolution}
+
+\subsection{Modélisation et implémentation d'un sudoku en Python et de l'interface graphique}
+
+
+Nous allons stocker dans une liste\footnote{\label{liste_Python}structure de donnée incluse de base dans python qui permet de contenir plusieurs variables différentes} contenant 9 listes\footref{liste_Python} qui représenteront nos ligne qui elles contiendront 9 entiers allant de 0 à 9. Nous aurons donc besoin de coder des fonctions pour faire le lien entre l'interface et notre résolveur du fait de notre modélisation du sudoku nous pouvons découper cela en plusieurs fonction utilitaire:\newline
+\begin{itemize}
+\item Une fonction qui nous permettra de stocker le contenu de notre interface graphique dans une liste comme celle décrite précédemment
+\item Une fonction permettant de transférer le contenu d'une liste comme celle décrite plus haut dans notre interface graphique
+\item Une fonction permettant de copier le contenu de la zone de saisi de notre interface dans la zone d'affichage de notre interface
+\item Une fonction permettant de copier le contenu de la zone d'affichage de notre interface dans la zone de saisi de notre interface
+\end{itemize}
