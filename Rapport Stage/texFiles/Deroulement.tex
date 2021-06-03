@@ -90,7 +90,7 @@ Nous allons tout d'abord vous présenter notre interface graphique qui nous serv
 
 \begin{figure}[h]
   \begin{center}
-\includegraphics[width=8cm]{./images/Interface_saisi.png}\label{Interface_affichage}
+\includegraphics[width=8cm]{./images/Interface_saisi.png}\label{Interface_saisi}
 \caption{Zone de saisi.}
 \end{center}
 \end{figure}
@@ -116,7 +116,7 @@ Nous allons stocker dans une liste\footnote{\label{liste_Python}structure de don
 \item Une fonction permettant de copier le contenu de la zone de saisi de notre interface dans la zone d'affichage de notre interface
 \item Une fonction permettant de copier le contenu de la zone d'affichage de notre interface dans la zone de saisi de notre interface
 \end{itemize}
-\newline
+
 Pour la création de notre interface nous avons eu besoin de 3 panel\footnote{Contenant des différent élément de notre interface} un contenant nos deux grille nous permettant leur superpositon et deux qui sont nous servent de grilles car nos grilles ne sont en réalité que deux panel contenant un nombre de zone de saisi de texte aussi appelé QTextEdit dans la librairie Qt égale à la $taille^{2}$ et l'autre le même nombre de zone d'affichage de texte aussi appelé QLabel toujours dans la librairie Qt. Aussi nous avons eu besoin codés de quelques fonctions mineurs:\newline
 
 \begin{itemize}
@@ -134,7 +134,7 @@ Nous avons pour contrainte:
 \item les chiffre de chaque colonnes doivent êtres différents
 \item les chiffres de chaques sous grilles doivent être différents
 \end{itemize}
-\newline
+
 Chaque inégalité peut être écrit sous la fore d'une fonction linéaire tel que:
 \newline
 $x-y=0$
@@ -201,15 +201,14 @@ Quand aux sudoku de taille différente nous n'avons qu'éffectuer des sudoku san
 
 \subsection{Implémentation de nos test}
 
-Nous n'avons eu besoin pour l'implémentation de nos test pour le test que d'une liste contenant des 0 pour notre cas le plus simple. Et pour notre cas le plus compliqué nous avons choisi de télécharger un fichier contenant 9 000 000 de sudoku résolu et n'avons eu qu'a en enlevé 64 valeurs t avons essayé notre sudoku sur quelque un d'entre eux.
+Nous n'avons eu besoin pour l'implémentation de nos test que d'une liste contenant des 0 pour notre cas le plus simple. Et pour notre cas le plus compliqué nous avons choisi de télécharger un fichier contenant 9 000 000 de sudoku résolu et n'avons eu qu'a en enlevé 64 valeurs et avons essayé notre sudoku sur quelque un d'entre eux.
 
 \subsection{Résultat de nos tests}
-
 \subsubsection{Changement d'algorithme de cplex}
 Nos test avec les sudoku standart nous ayant mené a la conclusion que l'algorithme du simplex nous menant à un temps de résolution bien trop long dans les deux cas nous avons finaleent utiliser l'optimiseur de cplex utilisant un autre algoritme de résolution mais ne changeant pas l'implémentation mais changeant légèrement nos contrainte nous avons donc utiliser la contrainte Alldiff de cplex pour les différentes règles d'unicité ayant une bien meilleur éfficacité, et remplacer la contraintes de la somme des valeur d'une ligne par une contraintes de valeur sur chaque variables pour qu'elles ne varient qu'entre 1 et 9.
-
+\newpage
 \subsection{résultat avec notre nouvelle algorithme}
-Nous avons une réponse quasi instentanées dans les deux cas voilà le sudoku donnné en retour d'un sudoku complètement vide standart:
+Nous avons une réponse quasi instentanées dans les tout les cas, voilà le sudoku donnné en retour d'un sudoku complètement vide standart:
 
 \begin{figure}[h]
   \begin{center}
@@ -217,12 +216,62 @@ Nous avons une réponse quasi instentanées dans les deux cas voilà le sudoku d
 \caption{Résolution de Grille Vide avec l'optimizer de Cplex.}
 \end{center}
 \end{figure}
-\newline
-Et celui donné dans le cas d'un sudoku avec 17 indices:\newline
 
 \begin{figure}[h]
   \begin{center}
-\includegraphics[width=8cm]{./images/Res_17.png}\label{Test_Cplex}
+\includegraphics[width=8cm]{./images/Res_17.png}\label{Test_Cplex_17}
 \caption{Résolution de Grille avec 17 indices grace à l'optimizer de Cplex.}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Resultat_16_Cplex.png}\label{Test_Cplex_16_16}
+\caption{Résolution de Grille de longueur et largeur égale à 16 grace à l'optimizer de Cplex.}
+\end{center}
+\end{figure}
+\newpage
+\subsection{Résultat avec notre algorithme de BackTracking}
+Pour ce qui est de l'algorithme utilisant le backtracking nous avons dans les deux cas avec des sudoku standart des réponses instantanée. Pour ce qui est du résultat avec un sudoku généralisé de taille 16 par 16 nous avons un temps de réponse notable et assez génant voir beaucoup trop long pour certaine taille tel que 15.\newline
+Voila le résultat de notre résolution avec un sudoku de taille standart sans indices:
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Res_Back_Vide.png}\label{Test_Back}
+\caption{Résolution de Grille Vide avec l'algorithme utilisant le backtracking.}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Res_Back_17.png}\label{Test_Back_17}
+\caption{Résolution de Grille avec 17 indices avec l'algorithme utilisant le backtracking.}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Resultat_16_Back.png}\label{Test_Back_16_16}
+\caption{Résolution de Grille de longueur et largeur égale à 16 avec l'algorithme utilisant le backtracking.}
+\end{center}
+\end{figure}
+
+\subsection{Analyse de nos résultats}
+
+\subsubsection{Résultats avec Cplex}
+
+Les résultats de l'utilisation de Cplex sont extrèmement positif pouvant réaliser d'extrèmes taille de sudoku sans aucun problème.
+
+\subsubsection{Résultat avec l'utilisation de BackTracking}
+
+Les résultats avec l'utilisation du backtracking permet parfaitement de résoudre un sudoku standart peu importe les indices données et leur nombre. Mais la généralisation laissant a désiré nous pouvons réfléchir à plusieurs piste d'amélioration de cela nous pouvons par exemple pour améliorer l'éfficacité de notre algorithme éviter les configurations où les valeurs peuvent êtres déduites de façon logique tel que celui ci:
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Exemple_deduction.png}\label{Exemple_Logique}
+\caption{Exemple de case dont la valeur peut-être déduite de façon logique dans notre cas la valeur dans la case encadré est 8.}
 \end{center}
 \end{figure}
