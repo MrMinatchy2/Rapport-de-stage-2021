@@ -101,7 +101,7 @@ Voilà donc notre interface avec un sudoku de 8 cases et 8 colonnes:\newline
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/8_8.png}\label{Interface_affichage_8_8}
-\caption{Interface de graphique de résolution d'un sudoku 8 par 8.}
+\caption{Interface graphique de résolution d'un sudoku 8 par 8.}
 \end{center}
 \end{figure}
 
@@ -117,32 +117,32 @@ Nous allons stocker dans une liste\footnote{\label{liste_Python}structure de don
 \item Une fonction permettant de copier le contenu de la zone d'affichage de notre interface dans la zone de saisi de notre interface
 \end{itemize}
 
-Pour la création de notre interface nous avons eu besoin de 3 panel\footnote{Contenant des différent élément de notre interface} un contenant nos deux grille nous permettant leur superpositon et deux qui sont nous servent de grilles car nos grilles ne sont en réalité que deux panel contenant un nombre de zone de saisi de texte aussi appelé QTextEdit dans la librairie Qt égale à la $taille^{2}$ et l'autre le même nombre de zone d'affichage de texte aussi appelé QLabel toujours dans la librairie Qt. Aussi nous avons eu besoin codés de quelques fonctions mineurs:\newline
+Pour la création de notre interface nous avons eu besoin de 3 panel\footnote{Contenant des différents éléments de notre interface} un contenant nos deux grilles nous permettant leur superpositon et deux qui nous servent de grilles car nos grilles ne sont en réalité que deux panel contenant un nombre de zone de saisi de texte aussi appelé QTextEdit dans la librairie Qt égale à la $largeur^{2}$ et l'autre le même nombre de zone d'affichage de texte aussi appelé QLabel toujours dans la librairie Qt. Aussi nous avons eu besoin codés de quelques fonctions mineurs:\newline
 
 \begin{itemize}
-\item Une fonction nous permettant de faire en sorte que la taille des zones de saisi de textes soit calculé par rapport à ce qu'elle contiennent
-\item Une fonction pour effectuerla résolution une fois la touche Entrée pressée.
+\item Une fonction nous permettant de faire en sorte que la taille des zones de saisi de textes soit calculée par rapport à leurs contenu.
+\item Une fonction pour effectuer la résolution une fois la touche Entrée pressé.
 \end{itemize}
 
 \subsection{Implémentation de la résolution avec Cplex}
 
 Comme nous l'avons fait dans notre exemple nous allons définir les contraintes et la fonction à maximiser:
-Nous avons pour contrainte:
+Nous avons pour contraintes:
 \begin{itemize}
-\item La somme de chaque ligne doit être égal à 45 pour permettre l'utilisation de chaque chiffre sur une ligne
-\item Les chiffres de chaques lignes doivent êtres différents
+\item La somme de chaque ligne doit être égale à 45 pour permettre l'utilisation de chaque chiffre sur une ligne
+\item Les chiffres de chaque lignes doivent êtres différents
 \item les chiffre de chaque colonnes doivent êtres différents
-\item les chiffres de chaques sous grilles doivent être différents
+\item les chiffres de chaque sous grilles doivent être différents
 \end{itemize}
 
-Chaque inégalité peut être écrit sous la fore d'une fonction linéaire tel que:
+Chaque inégalité peut être écrit sous la forme d'une fonction linéaire tel que:
 \newline
 $x-y=0$
 \newline
 La fonction à maximiser peut-être décrite comme la maximisation de la somme de chaque case en sachant que celle ci donnera toujours $9*45$ c'est a dire 405.
 \newline
-les case rempli c'est à dire les case indices de notre sudoku peuvent êtres modélisé par une contrainte d'égalité en plus sur la variable représentant la case concerné.\newline
-La généralisation du sudoku est implémenté telle qu'elle ne change pas la règle de l'unicité des chiffres sur les lignes et colonne et ne fait que fixer le nombre de valeur possible comme étant égale à la largeur ou longueur de notre sudoku car comme dit plus haut nous avons toujours le nombre de case sur une ligne égale au nombre de case sur une colonne. Nous pouvons donc décelé 2 cas a notre génération le meilleur cas ou le nombre n'est pas premier nous n'avons pour appliqué la règle des sous grilles qu'a trouvé un diviseur en privilégiant un diviseur dont le résultat de la division donne lui même ainsi notre sous grille pour le cas d'une résolution 10 ligne par 10 colonnne par exemple considéré que les sous grilles ce compose de 2 élémment sur les grilles et 5 élément sur les colonnes:
+les case remplies c'est à dire les cases indices de notre sudoku peuvent êtres modélisées par une contrainte d'égalité en plus sur la variable représentant la case concernée.\newline
+La généralisation du sudoku est implémenté telle qu'elle ne change pas la règle de l'unicité des chiffres sur les lignes et colonnes et ne fait que fixer le nombre de valeur possible comme étant égale à la largeur ou longueur de notre sudoku car comme dit plus haut nous avons toujours le nombre de case sur une ligne égale au nombre de case sur une colonne. Nous pouvons donc décelé 2 cas à notre génération, le pire cas où nous avons le nombre étant premier dans lequel nous avons décidé ne juste pas appliqué la règles des sous grilles et le meilleur cas où le nombre n'est pas premier nous n'avons pour appliqué la règle des sous grilles qu'a trouvé un diviseur en privilégiant un diviseur dont le résultat de la division donne lui même ainsi notre sous grille pour le cas d'une résolution 10 ligne par 10 colonnne par exemple donne des sous grilles qui ce composent de 2 élémments sur les lignes et 5 éléments sur les colonnes cequi donne un rectangle de 10 valeurs:
 
 \begin{figure}[h]
   \begin{center}
@@ -157,30 +157,30 @@ Pour cette algorithme nous avons besoin de 4 fonctions très simple:
 
 \begin{itemize}
   \item Une fonction pour copier notre liste.
-  \item Une fonction pour vérifier si notre sudoku est toujours valide autrement dit respect nos contraintes.
-  \item Une fonction pour vérifier si notre sudoku est remplie autrement dit ne cotient pas de case contenant la valeur 0.
+  \item Une fonction pour vérifier si notre sudoku est toujours valide, autrement dit si il respect nos contraintes.
+  \item Une fonction pour vérifier si notre sudoku est rempli autrement dit ne, contient pas de case contenant la valeur 0.
   \item Notre fonction principale qui utilisera toute les autres pour résoudre notre sudoku.
 \end{itemize}
 
 \subsubsection{Première fonction}
 
-Cette fonction nous sera utile a car en cas d'érreur quand nous testons les valeur nous devons pouvoir retourner en arrière et donc nous devons garder le sudoku de l'itération de test précédente, c'est pour cela que pour chaque test de valeur nous utiliserons une copie du sudoku de l'itération précédente.\newline
+Cette fonction nous est utile en cas d'erreur quand nous testons les valeurs car nous devons pouvoir retourner en arrière et donc nous devons garder le sudoku de l'itération de test précédente, c'est pour cela que pour chaque test de valeur nous utiliserons une copie du sudoku de l'itération précédente.\newline
 
 \subsubsection{Deuxième fonction}
 
-Cette fonction doit vérifier nos différentes règles d'unicité et si ls valeur des différente cases sont belle et bien comprises entre 1 et la largeur et longueur du sudoku. Elle doit considéré un sudoku incomplet mais respectant toutes les contraintes come étant un sudoku valide car dans le cas contraire aucune valeur testé sur la première case vide si il y en a d'autre ne serait valide ce qui nous empêcherait d'avancer dans nos test.\newline
+Cette fonction doit vérifier nos différentes règles d'unicité et si les valeur des différente cases sont belle et bien comprises entre 1 et la largeur/longueur du sudoku. Elle doit considérer un sudoku incomplet mais respectant toutes les contraintes comme étant un sudoku valide car dans le cas contraire aucune valeur testé sur la première case vide si il y en a d'autres ne serait valide ce qui nous empêcherait d'avancer dans nos test.\newline
 
 \subsection{Troisième fonction}
 
-Comme dit précédemment nous considèrons un sudoku incomplet mais respectant nos contraintes d'unicité comme étant valide. Nous avons donc besoin dune fonction pour savoir si notre sudoku est rempli ou non pour terminer notre résolution. Un sudoku résolu étant un sudoku remplie et valide.\newline
+Comme dit précédemment nous considèrons un sudoku incomplet mais respectant nos contraintes d'unicité comme étant valide. Nous avons donc besoin d'une fonction pour savoir si notre sudoku est rempli ou non pour terminer notre résolution. Un sudoku rempli est un sudoku ne contenant pas la valeur zero et un sudoku résolu étant un sudoku rempli et valide.\newline
 
 \subsection{Fonction principale}
 
-Cette fonction est la plus longue de notre programme de résolution mais n'en est pas moins simple cette fonction doit en premier lieu trouver la première case vide dans le sens de lecture de notre sudoku (de gauche a droite et de haut en bas).\newline
-Puis doit tester les valeur de 1 à 9 en faisant attention avant de tester une valeur de vérifier si le sudoku est toujours valide si elle est posé avant de l'essayer.\newline
-Une fois une valeur valide trouver la fonction on répète cette opération defaçon récursive\footnote{Par un appelle de la fonction dans cette même fonction} mais cette fois avec notre copie de sudoku avec notre nouvelle valeur ajoutée.\newline
-Si nous ne trouvons aucune valeur de 1 à 9 pour notre case nous retournons la liste sans ajouté de valeur afin de tester une autre valeur dans la case vide précédente.\newline
-Comme dit précédemment nous ne nous arrêtons que quand notre sudoku est remplie et valide.\newline
+Cette fonction est la plus longue de notre programme de résolution mais n'en est pas moins simple cette fonction doit en premier lieu trouver la première case vide dans le sens de lecture de notre sudoku (de gauche à droite et de haut en bas).\newline
+Puis doit tester les valeurs de 1 à 9 en faisant attention avant de tester une valeur en vérifiant si le sudoku est toujours valide si elle est posé avant de l'essayer.\newline
+Une fois une valeur valide trouvée la fonction on répète cette opération de façon récursive\footnote{Par un appel de la fonction dans cette même fonction} mais cette fois avec notre copie de sudoku avec notre nouvelle valeur ajoutée.\newline
+Si nous ne trouvons aucune valeur de 1 à 9 pour notre case nous retournons la liste sans ajouter de valeur afin de tester une autre valeur dans la case vide précédente.\newline
+Comme dit précédemment nous ne nous arrêtons que quand notre sudoku est rempli et valide.\newline
 
 \section{Test du résolveur}
 
@@ -188,39 +188,39 @@ Comme dit précédemment nous ne nous arrêtons que quand notre sudoku est rempl
 
 \subsubsection{Test avec un sudoku standart complètement vide}
 
-Nous avons tout d'abord pensez essayer notre résolveur sur un sudoku complètement vide ce sudoku ayant le plus grand nombre de solution car à ce sudoku est solution toutes les grilles de sudoku existantes, s'agit donc d'un des meilleurs cas possible pour nos deux algorithmes.
+Nous avons tout d'abord pensé à essayer notre résolveur sur un sudoku complètement vide ce sudoku ayant le plus grand nombre de solution car à ce sudoku est solution toutes les grilles de sudoku valide et remplie existantes, il s'agit donc d'un des meilleurs cas possible pour nos deux algorithmes.
 
 \subsubsection{Test avec un sudoku standart rempli de 17 valeurs}
 
-Maintenant que nous avons identifié notre meilleur des cas commun nous pouvons maintenant essayer de trouver notre pire des cas commun, c'est grace a un article que nous avons pu l'identifier en effet selon cette article: \cite{NombredeDieu}\newline
-Nous avons appris que Le nombre minimal d'indicepour n'avoir qu'une seule solution a une grille de sudoku était 17. Ce qui en plus de n'admettre qu'une seule solution possible nous donne le moins de valeur déjà entrer possible.
+Maintenant que nous avons identifié notre meilleur des cas commun nous pouvons maintenant essayer de trouver notre pire des cas commun, c'est grace à un article que nous avons pu l'identifier en effet selon cette article: \cite{NombredeDieu}\newline
+Nous avons appris que Le nombre minimal d'indice pour n'avoir qu'une seule solution à une grille de sudoku était 17. Ce qui en plus de n'admettre qu'une seule solution possible nous donne le moins de valeur déjà entrées possible.
 
 \subsection{Test de la généralisation}
 
-Quand aux sudoku de taille différente nous n'avons qu'éffectuer des sudoku sans indices de par le fais de notre méconnaissance de ceux-ci car contrairement au sudoku standart nous n'avons pas trouver d'équivalent au nombre de dieu des sudoku standart et n'avons pas les moyen d'en éffectuer la recherche comme il a été fait dans l'article.
+Quant aux sudokus de taille différente nous n'avons effectuer des test que sur sudoku sans indices de par le fait de notre méconnaissance des sudoku généralisé car contrairement au sudoku standart nous n'avons pas trouvé d'équivalent au nombre de dieu des sudoku standart et n'avons pas les moyens d'en effectuer la recherche comme il a été fait dans l'article.
 
 \subsection{Implémentation de nos test}
 
-Nous n'avons eu besoin pour l'implémentation de nos test que d'une liste contenant des 0 pour notre cas le plus simple. Et pour notre cas le plus compliqué nous avons choisi de télécharger un fichier contenant 9 000 000 de sudoku résolu et n'avons eu qu'a en enlevé 64 valeurs et avons essayé notre sudoku sur quelque un d'entre eux.
+Nous n'avons eu besoin pour l'implémentation de nos test que d'une liste contenant des 0 pour notre cas le plus simple. Et pour notre cas le plus compliqué nous avons choisi de télécharger un fichier contenant 9 000 000 de sudoku résolu et n'avons eu qu'à en enlever 64 valeurs et avons essayé notre sudoku sur quelques-uns d'entre eux.
 
 \subsection{Résultat de nos tests}
 \subsubsection{Changement d'algorithme de cplex}
-Nos test avec les sudoku standart nous ayant mené a la conclusion que l'algorithme du simplex nous menant à un temps de résolution bien trop long dans les deux cas nous avons finaleent utiliser l'optimiseur de cplex utilisant un autre algoritme de résolution mais ne changeant pas l'implémentation mais changeant légèrement nos contrainte nous avons donc utiliser la contrainte Alldiff de cplex pour les différentes règles d'unicité ayant une bien meilleur éfficacité, et remplacer la contraintes de la somme des valeur d'une ligne par une contraintes de valeur sur chaque variables pour qu'elles ne varient qu'entre 1 et 9.
+Nos tests avec les sudokus standarts nous ayant mené à la conclusion que l'algorithme du simplex nous confronte à un temps de résolution bien trop long dans les deux cas nous avons finalement décidé d'utiliser l'optimiseur de cplex utilisant un autre algoritme de résolution, ne changeant pas l'implémentation mais changeant légèrement nos contraintes nous avons donc utilisé la contrainte Alldiff de Cplex pour les différentes règles d'unicité ayant une bien meilleur efficacité, et remplacer la contrainte de la somme des valeurs d'une ligne par une contrainte de valeur sur chaque variable pour qu'elles ne varient qu'entre 1 et 9.
 \newpage
 \subsection{résultat avec notre nouvelle algorithme}
-Nous avons une réponse quasi instentanées dans les tout les cas, voilà le sudoku donnné en retour d'un sudoku complètement vide standart:
+Nous avons des réponses quasiments instentanées dans les tout les cas, voilà le sudoku donnné en retour d'un sudoku complètement vide standart:
 
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/Res_Vide.png}\label{Test_Cplex}
-\caption{Résolution de Grille Vide avec l'optimizer de Cplex.}
+\caption{Résolution de grille vide avec l'optimizer de Cplex.}
 \end{center}
 \end{figure}
 
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/Res_17.png}\label{Test_Cplex_17}
-\caption{Résolution de Grille avec 17 indices grace à l'optimizer de Cplex.}
+\caption{Résolution de grille avec 17 indices grace à l'optimizer de Cplex.}
 \end{center}
 \end{figure}
 
@@ -233,13 +233,13 @@ Nous avons une réponse quasi instentanées dans les tout les cas, voilà le sud
 \end{figure}
 \newpage
 \subsection{Résultat avec notre algorithme de BackTracking}
-Pour ce qui est de l'algorithme utilisant le backtracking nous avons dans les deux cas avec des sudoku standart des réponses instantanée. Pour ce qui est du résultat avec un sudoku généralisé de taille 16 par 16 nous avons un temps de réponse notable et assez génant voir beaucoup trop long pour certaine taille tel que 15.\newline
+Pour ce qui est de l'algorithme utilisant le backtracking nous avons avec des sudoku standart des réponses instantanée. Pour ce qui est du résultat avec un sudoku généralisé de taille 16 par 16 nous avons un temps de réponse notable et assez génant voir beaucoup trop long pour certaine taille tel que 15.\newline
 Voila le résultat de notre résolution avec un sudoku de taille standart sans indices:
 
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/Res_Back_Vide.png}\label{Test_Back}
-\caption{Résolution de Grille Vide avec l'algorithme utilisant le backtracking.}
+\caption{Résolution de grille vide avec l'algorithme utilisant le backtracking.}
 \end{center}
 \end{figure}
 
@@ -247,7 +247,7 @@ Voila le résultat de notre résolution avec un sudoku de taille standart sans i
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/Res_Back_17.png}\label{Test_Back_17}
-\caption{Résolution de Grille avec 17 indices avec l'algorithme utilisant le backtracking.}
+\caption{Résolution de grille avec 17 indices avec l'algorithme utilisant le backtracking.}
 \end{center}
 \end{figure}
 
@@ -255,7 +255,7 @@ Voila le résultat de notre résolution avec un sudoku de taille standart sans i
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/Resultat_16_Back.png}\label{Test_Back_16_16}
-\caption{Résolution de Grille de longueur et largeur égale à 16 avec l'algorithme utilisant le backtracking.}
+\caption{Résolution de grille de longueur et largeur égale à 16 avec l'algorithme utilisant le backtracking.}
 \end{center}
 \end{figure}
 
@@ -263,15 +263,15 @@ Voila le résultat de notre résolution avec un sudoku de taille standart sans i
 
 \subsubsection{Résultats avec Cplex}
 
-Les résultats de l'utilisation de Cplex sont extrèmement positif pouvant réaliser d'extrèmes taille de sudoku sans aucun problème.
+Les résultats de l'utilisation de Cplex sont extrèmements positifs, notre résolvur utilisant Cplex peut réaliser d'extrèmes taille de sudoku sans aucun problème.
 
 \subsubsection{Résultat avec l'utilisation de BackTracking}
 
-Les résultats avec l'utilisation du backtracking permet parfaitement de résoudre un sudoku standart peu importe les indices données et leur nombre. Mais la généralisation laissant a désiré nous pouvons réfléchir à plusieurs piste d'amélioration de cela nous pouvons par exemple pour améliorer l'éfficacité de notre algorithme éviter les configurations où les valeurs peuvent êtres déduites de façon logique tel que celui ci:
+Les résultats avec l'utilisation du backtracking permet parfaitement de résoudre un sudoku standart peu importe les indices données et leurs nombre. Mais la généralisation laissant à désiré au niveau du temps de calcul, nous pouvons réfléchir à plusieurs piste d'amélioration de cela nous pouvons par exemple pour améliorer l'éfficacité de notre algorithme éviter les configurations où les valeurs peuvent êtres déduites de façon logique tel que celle-ci:
 
 \begin{figure}[h]
   \begin{center}
 \includegraphics[width=8cm]{./images/Exemple_deduction.png}\label{Exemple_Logique}
-\caption{Exemple de case dont la valeur peut-être déduite de façon logique dans notre cas la valeur dans la case encadré est 8.}
+\caption{Exemple de case dont la valeur peut-être déduite de façon logique, dans notre cas la valeur dans la case encadré est 8.}
 \end{center}
 \end{figure}
