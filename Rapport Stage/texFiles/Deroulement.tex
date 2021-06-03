@@ -31,8 +31,7 @@ La quantité maximale de malt: $Ma \geq x^{1}*17,5+x^{2}*10$\newline\newline
 
 \subsubsection{Comment résoudre un problème d'optimisation linéaire}
 
- Maintenant que nous avons vu ce qu'est un problème d'optimisation linéaire et illustré ceci par un exemple nous allons voir comment peut-on le résoudre plus particulièrement comment avec l'algorithme du simplex en théorie puis avec Cplex.
-
+ Maintenant que nous avons vu ce qu'est un problème d'optimisation linéaire et illustré ceci par un exemple nous allons voir sa solution avec Cplex.\newline
  La résolution avec cplex est des plus simples il suffit de mettre en place nos contraintes et notre fonction à maximiser le code sera donner et expliciter en annexe:
 
  \begin{figure}[h]
@@ -64,17 +63,166 @@ La résolution avec l'algorithme du simplex permet une implementation intuitive 
 
 \subsubsection{Pourquoi utiliser l'algorithme utilisant le backtracking}
 
-La résolution avec avec backtracking est l'algorithme le plus naturel qui viennent à l'esprit dans la résolution de problème avec contrainte ce qui permet une facile implémentation de la gestion des contraintes malgré leur nombre.C'est un algorithme facilement améliorable car le but tout au long de son implémentation sera de tester le moins de valeur menant à une impasse possible. Cette algorithme a aussi pour avantage de n'avoir besoin daucune librairie extérieur ce qui permet une liberté totale au niveau du code et donne lieu à une certaine transparence quand à son fonctionnement contrairement aux au code que nous utilisons via cplex qui peuvent différé légèrement de leurs fonctionnements théoriques cités plus haut.
+La résolution avec avec backtracking est l'algorithme le plus naturel qui viennent à l'esprit dans la résolution de problème avec contrainte ce qui permet une facile implémentation de la gestion des contraintes malgré leur nombre.C'est un algorithme facilement améliorable car le but tout au long de son implémentation sera de tester le moins de valeur menant à une impasse possible. Cette algorithme a aussi pour avantage de n'avoir besoin daucune librairie extérieur ce qui permet une liberté totale au niveau du code et donne lieu à une certaine transparence quand à son fonctionnement contrairement aux au code que nous utilisons via cplex qui peuvent différé légèrement de leurs fonctionnements théoriques cités plus haut.\newpage
 
 \subsection{Implémentation des Stratégies de résolution}
 
 \subsection{Modélisation et implémentation d'un sudoku en Python et de l'interface graphique}
 
+\subsubsection{Présentation de l'interface graphique}
+Nous allons tout d'abord vous présenter notre interface graphique qui nous servira tout au long de nos test:\newline
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Interface_Complete.png}\label{Interface_complete}
+\caption{Interface graphique Complete.}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Interface_Affichage.png}\label{Interface_affichage}
+\caption{Zone d'affichage.}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Interface_saisi.png}\label{Interface_affichage}
+\caption{Zone de saisi.}
+\end{center}
+\end{figure}
+
+Notre interface se compose donc d'une zone de saisi qui contiendra le sudoku pas qui devra être résolu par notre programme et un zone d'affichage qui contiendra le sudoku une fois résolution par notre algorithme de résolution. L'affichage des nombre entrées dans la zone de saisi ce fait de façon dynamique dans la zone d'affichage et la résolution ce fait une fois que l'utilisateur a appuyé sur la touhe entrée. Notre algorithme devant être innovant nous avons pensez à la généralisation du sudoku c'est à dire que nous pouvons choisir la taille des sudokus résolu par notre interface toujours avec un nombre de case et de ligne égales pour une raison d'impossibilité autrement à cause de la règle des sous-grilles.\newline
+Voilà donc notre interface avec un sudoku de 8 cases et 8 colonnes:\newline
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/8_8.png}\label{Interface_affichage_8_8}
+\caption{Interface de graphique de résolution d'un sudoku 8 par 8.}
+\end{center}
+\end{figure}
+
+
+\subsubsection{Implémentation de l'interface graphique}
 
 Nous allons stocker dans une liste\footnote{\label{liste_Python}structure de donnée incluse de base dans python qui permet de contenir plusieurs variables différentes} contenant 9 listes\footref{liste_Python} qui représenteront nos ligne qui elles contiendront 9 entiers allant de 0 à 9. Nous aurons donc besoin de coder des fonctions pour faire le lien entre l'interface et notre résolveur du fait de notre modélisation du sudoku nous pouvons découper cela en plusieurs fonction utilitaire:\newline
 \begin{itemize}
 \item Une fonction qui nous permettra de stocker le contenu de notre interface graphique dans une liste comme celle décrite précédemment
-\item Une fonction permettant de transférer le contenu d'une liste comme celle décrite plus haut dans notre interface graphique
+\item Une fonction permettant de transférer le contenu d'une liste comme celle décrite plus haut dans la zone de saisi notre interface graphique
+\item Une fonction permettant de transférer le contenu d'une liste comme celle décrite plus haut dans la zone d'affichage notre interface graphique
 \item Une fonction permettant de copier le contenu de la zone de saisi de notre interface dans la zone d'affichage de notre interface
 \item Une fonction permettant de copier le contenu de la zone d'affichage de notre interface dans la zone de saisi de notre interface
 \end{itemize}
+\newline
+Pour la création de notre interface nous avons eu besoin de 3 panel\footnote{Contenant des différent élément de notre interface} un contenant nos deux grille nous permettant leur superpositon et deux qui sont nous servent de grilles car nos grilles ne sont en réalité que deux panel contenant un nombre de zone de saisi de texte aussi appelé QTextEdit dans la librairie Qt égale à la $taille^{2}$ et l'autre le même nombre de zone d'affichage de texte aussi appelé QLabel toujours dans la librairie Qt. Aussi nous avons eu besoin codés de quelques fonctions mineurs:\newline
+
+\begin{itemize}
+\item Une fonction nous permettant de faire en sorte que la taille des zones de saisi de textes soit calculé par rapport à ce qu'elle contiennent
+\item Une fonction pour effectuerla résolution une fois la touche Entrée pressée.
+\end{itemize}
+
+\subsection{Implémentation de la résolution avec Cplex}
+
+Comme nous l'avons fait dans notre exemple nous allons définir les contraintes et la fonction à maximiser:
+Nous avons pour contrainte:
+\begin{itemize}
+\item La somme de chaque ligne doit être égal à 45 pour permettre l'utilisation de chaque chiffre sur une ligne
+\item Les chiffres de chaques lignes doivent êtres différents
+\item les chiffre de chaque colonnes doivent êtres différents
+\item les chiffres de chaques sous grilles doivent être différents
+\end{itemize}
+\newline
+Chaque inégalité peut être écrit sous la fore d'une fonction linéaire tel que:
+\newline
+$x-y=0$
+\newline
+La fonction à maximiser peut-être décrite comme la maximisation de la somme de chaque case en sachant que celle ci donnera toujours $9*45$ c'est a dire 405.
+\newline
+les case rempli c'est à dire les case indices de notre sudoku peuvent êtres modélisé par une contrainte d'égalité en plus sur la variable représentant la case concerné.\newline
+La généralisation du sudoku est implémenté telle qu'elle ne change pas la règle de l'unicité des chiffres sur les lignes et colonne et ne fait que fixer le nombre de valeur possible comme étant égale à la largeur ou longueur de notre sudoku car comme dit plus haut nous avons toujours le nombre de case sur une ligne égale au nombre de case sur une colonne. Nous pouvons donc décelé 2 cas a notre génération le meilleur cas ou le nombre n'est pas premier nous n'avons pour appliqué la règle des sous grilles qu'a trouvé un diviseur en privilégiant un diviseur dont le résultat de la division donne lui même ainsi notre sous grille pour le cas d'une résolution 10 ligne par 10 colonnne par exemple considéré que les sous grilles ce compose de 2 élémment sur les grilles et 5 élément sur les colonnes:
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/10_10.png}\label{10_10}
+\caption{Sudoku 10 par 10 résolu montrant la première sous grille.}
+\end{center}
+\end{figure}
+
+\subsection{Implémentation de la résolution avec l'algorithme du backtracking}
+
+Pour cette algorithme nous avons besoin de 4 fonctions très simple:
+
+\begin{itemize}
+  \item Une fonction pour copier notre liste.
+  \item Une fonction pour vérifier si notre sudoku est toujours valide autrement dit respect nos contraintes.
+  \item Une fonction pour vérifier si notre sudoku est remplie autrement dit ne cotient pas de case contenant la valeur 0.
+  \item Notre fonction principale qui utilisera toute les autres pour résoudre notre sudoku.
+\end{itemize}
+
+\subsubsection{Première fonction}
+
+Cette fonction nous sera utile a car en cas d'érreur quand nous testons les valeur nous devons pouvoir retourner en arrière et donc nous devons garder le sudoku de l'itération de test précédente, c'est pour cela que pour chaque test de valeur nous utiliserons une copie du sudoku de l'itération précédente.\newline
+
+\subsubsection{Deuxième fonction}
+
+Cette fonction doit vérifier nos différentes règles d'unicité et si ls valeur des différente cases sont belle et bien comprises entre 1 et la largeur et longueur du sudoku. Elle doit considéré un sudoku incomplet mais respectant toutes les contraintes come étant un sudoku valide car dans le cas contraire aucune valeur testé sur la première case vide si il y en a d'autre ne serait valide ce qui nous empêcherait d'avancer dans nos test.\newline
+
+\subsection{Troisième fonction}
+
+Comme dit précédemment nous considèrons un sudoku incomplet mais respectant nos contraintes d'unicité comme étant valide. Nous avons donc besoin dune fonction pour savoir si notre sudoku est rempli ou non pour terminer notre résolution. Un sudoku résolu étant un sudoku remplie et valide.\newline
+
+\subsection{Fonction principale}
+
+Cette fonction est la plus longue de notre programme de résolution mais n'en est pas moins simple cette fonction doit en premier lieu trouver la première case vide dans le sens de lecture de notre sudoku (de gauche a droite et de haut en bas).\newline
+Puis doit tester les valeur de 1 à 9 en faisant attention avant de tester une valeur de vérifier si le sudoku est toujours valide si elle est posé avant de l'essayer.\newline
+Une fois une valeur valide trouver la fonction on répète cette opération defaçon récursive\footnote{Par un appelle de la fonction dans cette même fonction} mais cette fois avec notre copie de sudoku avec notre nouvelle valeur ajoutée.\newline
+Si nous ne trouvons aucune valeur de 1 à 9 pour notre case nous retournons la liste sans ajouté de valeur afin de tester une autre valeur dans la case vide précédente.\newline
+Comme dit précédemment nous ne nous arrêtons que quand notre sudoku est remplie et valide.\newline
+
+\section{Test du résolveur}
+
+\subsection{Choix de nos test}
+
+\subsubsection{Test avec un sudoku standart complètement vide}
+
+Nous avons tout d'abord pensez essayer notre résolveur sur un sudoku complètement vide ce sudoku ayant le plus grand nombre de solution car à ce sudoku est solution toutes les grilles de sudoku existantes, s'agit donc d'un des meilleurs cas possible pour nos deux algorithmes.
+
+\subsubsection{Test avec un sudoku standart rempli de 17 valeurs}
+
+Maintenant que nous avons identifié notre meilleur des cas commun nous pouvons maintenant essayer de trouver notre pire des cas commun, c'est grace a un article que nous avons pu l'identifier en effet selon cette article: \cite{NombredeDieu}\newline
+Nous avons appris que Le nombre minimal d'indicepour n'avoir qu'une seule solution a une grille de sudoku était 17. Ce qui en plus de n'admettre qu'une seule solution possible nous donne le moins de valeur déjà entrer possible.
+
+\subsection{Test de la généralisation}
+
+Quand aux sudoku de taille différente nous n'avons qu'éffectuer des sudoku sans indices de par le fais de notre méconnaissance de ceux-ci car contrairement au sudoku standart nous n'avons pas trouver d'équivalent au nombre de dieu des sudoku standart et n'avons pas les moyen d'en éffectuer la recherche comme il a été fait dans l'article.
+
+\subsection{Implémentation de nos test}
+
+Nous n'avons eu besoin pour l'implémentation de nos test pour le test que d'une liste contenant des 0 pour notre cas le plus simple. Et pour notre cas le plus compliqué nous avons choisi de télécharger un fichier contenant 9 000 000 de sudoku résolu et n'avons eu qu'a en enlevé 64 valeurs t avons essayé notre sudoku sur quelque un d'entre eux.
+
+\subsection{Résultat de nos tests}
+
+\subsubsection{Changement d'algorithme de cplex}
+Nos test avec les sudoku standart nous ayant mené a la conclusion que l'algorithme du simplex nous menant à un temps de résolution bien trop long dans les deux cas nous avons finaleent utiliser l'optimiseur de cplex utilisant un autre algoritme de résolution mais ne changeant pas l'implémentation mais changeant légèrement nos contrainte nous avons donc utiliser la contrainte Alldiff de cplex pour les différentes règles d'unicité ayant une bien meilleur éfficacité, et remplacer la contraintes de la somme des valeur d'une ligne par une contraintes de valeur sur chaque variables pour qu'elles ne varient qu'entre 1 et 9.
+
+\subsection{résultat avec notre nouvelle algorithme}
+Nous avons une réponse quasi instentanées dans les deux cas voilà le sudoku donnné en retour d'un sudoku complètement vide standart:
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Res_Vide.png}\label{Test_Cplex}
+\caption{Résolution de Grille Vide avec l'optimizer de Cplex.}
+\end{center}
+\end{figure}
+\newline
+Et celui donné dans le cas d'un sudoku avec 17 indices:\newline
+
+\begin{figure}[h]
+  \begin{center}
+\includegraphics[width=8cm]{./images/Res_17.png}\label{Test_Cplex}
+\caption{Résolution de Grille avec 17 indices grace à l'optimizer de Cplex.}
+\end{center}
+\end{figure}
