@@ -141,7 +141,7 @@ $x-y=0$
 \newline
 La fonction à maximiser peut-être décrite comme la maximisation de la somme de chaque case en sachant que celle ci donnera toujours $9*45$ c'est a dire 405.
 \newline
-les case rempli c'est à dire les case indices de notre sudoku peuvent êtres modélisé par une contrainte d'égalité en plus sur la variable représentant la case concerné.\newline
+les case rempli c'est à dire les cases contenants les indices de notre sudoku peuvent êtres modélisé par une contrainte d'égalité en plus sur la variable représentant la case concerné.\newline
 La généralisation du sudoku est implémenté telle qu'elle ne change pas la règle de l'unicité des chiffres sur les lignes et colonne et ne fait que fixer le nombre de valeur possible comme étant égale à la largeur ou longueur de notre sudoku car comme dit plus haut nous avons toujours le nombre de case sur une ligne égale au nombre de case sur une colonne. Nous pouvons donc décelé 2 cas a notre génération le meilleur cas ou le nombre n'est pas premier nous n'avons pour appliqué la règle des sous grilles qu'a trouvé un diviseur en privilégiant un diviseur dont le résultat de la division donne lui même ainsi notre sous grille pour le cas d'une résolution 10 ligne par 10 colonnne par exemple considéré que les sous grilles ce compose de 2 élémment sur les grilles et 5 élément sur les colonnes:
 
 \begin{figure}[h]
@@ -168,7 +168,7 @@ Cette fonction nous sera utile a car en cas d'érreur quand nous testons les val
 
 \subsubsection{Deuxième fonction}
 
-Cette fonction doit vérifier nos différentes règles d'unicité et si ls valeur des différente cases sont belle et bien comprises entre 1 et la largeur et longueur du sudoku. Elle doit considéré un sudoku incomplet mais respectant toutes les contraintes come étant un sudoku valide car dans le cas contraire aucune valeur testé sur la première case vide si il y en a d'autre ne serait valide ce qui nous empêcherait d'avancer dans nos test.\newline
+Cette fonction doit vérifier nos différentes règles d'unicité et si ls valeur des différente cases sont belle et bien comprises entre 1 et la largeur et longueur du sudoku. Elle doit considéré un sudoku incomplet mais respectant toutes les contraintes comme étant un sudoku valide car dans le cas contraire aucune valeur testée sur la première case vide si il y en a d'autre ne serait valide ce qui nous empêcherait d'avancer dans nos test.\newline
 
 \subsection{Troisième fonction}
 
@@ -188,7 +188,7 @@ Comme dit précédemment nous ne nous arrêtons que quand notre sudoku est rempl
 
 \subsubsection{Test avec un sudoku standart complètement vide}
 
-Nous avons tout d'abord pensez essayer notre résolveur sur un sudoku complètement vide ce sudoku ayant le plus grand nombre de solution car à ce sudoku est solution toutes les grilles de sudoku existantes, s'agit donc d'un des meilleurs cas possible pour nos deux algorithmes.
+Nous avons tout d'abord pensé à essayer notre résolveur sur un sudoku complètement vide, ce sudoku ayant le plus grand nombre de solution car à ce sudoku est solution toutes les grilles de sudoku existantes, s'agit donc d'un des meilleurs cas possible pour nos deux algorithmes.
 
 \subsubsection{Test avec un sudoku standart rempli de 17 valeurs}
 
